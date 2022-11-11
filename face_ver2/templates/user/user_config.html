@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block title %}{{ user.user_name }}さんの設定{% endblock title %}
+
+{% block content %}
+
+    {% include 'user/navi.html' %}
+
+    {# ユーザー情報表示 #}
+    <h2>ユーザー情報</h2>
+    <div class="container table table-striped table-active">
+        <div class="row" style="display: flex;flex-wrap: wrap;">
+            <div class="col-4 m-md-3" style="font-size: x-large">学籍番号</div>
+            <div class="col-5 m-md-3" style="font-size: x-large">{{ user.schoolnum }}</div>
+        </div>
+        <div class="row" style="display: flex;flex-wrap: wrap;">
+            <div class="col-4 m-md-3" style="font-size: x-large">名前</div>
+            <div class="col-5 m-md-3" style="font-size: x-large">{{ user.user_name }}</div>
+        </div>
+        <div class="row" style="display: flex;flex-wrap: wrap;">
+            <div class="col-4 m-md-3" style="font-size: x-large">パスワード</div>
+            <div class="col-5 m-md-3" style="font-size: x-large">{{ user.password }}</div>
+        </div>
+        <div class="row" style="display: flex;flex-wrap: wrap;">
+            <div class="col-4 m-md-3" style="font-size: x-large">作成日</div>
+            <div class="col-5 m-md-3" style="font-size: x-large">{{ user.created_at }}</div>
+        </div>
+        <div class="row" style="display: flex;flex-wrap: wrap;">
+            <div class="col-4 m-md-3" style="font-size: x-large">更新日</div>
+            <div class="col-5 m-md-3" style="font-size: x-large">{{ user.updated_at }}</div>
+        </div>
+        <div class="row" style="display: flex;flex-wrap: wrap;">
+            <div class="col-4 m-md-3" style="font-size: x-large">備考</div>
+            <div class="col-5 m-md-3" style="font-size: x-large">{{ user.free_text }}</div>
+        </div>
+    </div>
+    <a href="{% url 'User:user_mod' user_id=user.schoolnum %}" class="btn btn-warning col-5" style="height: 100px; line-height: 80px; font-size: 2.5em;">修正</a>
+    <a href="{% url 'User:user_mod' user_id=user.schoolnum %}"  class="btn btn-primary col-5" style="height: 100px; line-height: 80px; font-size: 2.5em;">撮影</a>
+    <video id="video" width="640" height="480" autoplay playsinline></video>
+    <script>
+        //動画流す準備
+        var video = document.getElementById("video");
+        // getUserMedia によるカメラ映像の取得
+        var media = navigator.mediaDevices.getUserMedia({
+            video: true,//ビデオを取得する
+            //使うカメラをインカメラか背面カメラかを指定する場合には
+            //video: { facingMode: "environment" },//背面カメラ
+            //video: { facingMode: "user" },//インカメラ
+            audio: false,//音声が必要な場合はture
+        });
+        //リアルタイムに再生（ストリーミング）させるためにビデオタグに流し込む
+        media.then((stream) => {
+            video.srcObject = stream;
+        });
+    </script>
+
+{% endblock content %}
+
+
+

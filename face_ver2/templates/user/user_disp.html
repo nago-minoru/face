@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load bootstrap4 %}
+
+{% block title %}ユーザー一覧{% endblock title %}
+
+{% block content %}
+
+    {% include 'user/navi.html' %}
+    {% include 'user/subnavi.html' %}
+
+    {# ユーザー情報表示 #}
+    {% if users %}
+        <div class="row">
+            {% for user in users %}
+                {# カード型でユーザー情報を表示 #}
+                <div class="col-sm-6 col-md-3" style="margin-bottom: 10px;">
+                    <div class="card img-thumbnail">
+                        <a href="{% url 'User:user_config' user_id=user.schoolnum %}" class="btn btn-primary btn-sm my-3">ユーザー設定</a>
+                        <div class="card-body px-2 py-3">
+
+                            {# カード型データの見出し #}
+                            <h5 class="card-title">学籍番号:{{ user.schoolnum }}</h5>
+                            <p class="card-text">名前:{{ user.user_name }}</p>
+
+                            {# モーダルに渡すデータ #}
+                            <input type="hidden" id="user_number"     value="{{ user.schoolnum }}">
+                            <input type="hidden" id="user_name"       value="{{ user.user_name }}">
+                            <input type="hidden" id="user_password"   value="{{ user.password }}">
+                            <input type="hidden" id="user_created_at" value="{{ user.created_at }}">
+                            <input type="hidden" id="user_updated_at" value="{{ user.updated_at }}">
+                            <input type="hidden" id="user_free_text"  value="{{ user.free_text }}">
+
+                            {# モーダル呼び出しのボタン #}
+                            <p class="mb-0">
+                                <button class="btn btn-outline-secondary btn-sm detail"
+                                        data-toggle="modal"
+                                        data-target="#modal-disp">
+                                    詳細
+                                </button>
+                                <a href="{% url 'User:user_del' user_id=user.schoolnum %}"
+                                   class="btn btn-outline-danger btn-sm">削除</a>
+                            </p>
+                        </div><!-- /.card-body -->
+                    </div><!-- /.card -->
+                </div><!-- /.col-sm-6.col-md-3 -->
+            {% endfor %}<!-- userの取得 -->
+         </div><!-- /.row -->
+
+    {% else %}
+        <h2>まだ登録されていません</h2>
+    {% endif %}
+
+
+    {# モーダル本体 #}
+    <div class="modal fade"
+         id="modal-disp"
+         tabindex="-1"
+         role="dialog"
+         aria-labelledby="modal-dispLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="modal-dispLabel"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="control-label">学籍番号</label>
+                            <input type="text" class="form-control" id="get-number">
+
+                            <label for="recipient-name" class="control-label">名前</label>
+                            <input type="text" class="form-control" id="get-name">
+
+                            <label for="recipient-name" class="control-label">パスワード</label>
+                            <input type="text" class="form-control" id="get-password">
+
+                            <label for="recipient-name" class="control-label">フリーテキスト</label>
+                            <input type="text" class="form-control" id="get-free_text">
+
+                            <label for="recipient-name" class="control-label">作成日</label>
+                            <input type="text" class="form-control" id="get-created_at">
+
+                            <label for="recipient-name" class="control-label">更新日</label>
+                            <input type="text" class="form-control" id="get-updated_at">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+{#                    <button type="button" class="btn btn-primary">送信</button></div>#}
+            </div>{# modal-content #}
+        </div>{# modal-dialog #}
+    </div>{# modal fade #}
+
+    {# モーダル処理 #}
+    <script>
+        //モーダルのcssクラス:detailのクリック処理
+        //ユーザー情報の詳細を表示する
+        $('.detail').on('click', function() {
+            //モーダルを取得
+            const modal = $('#modal-disp');
+
+            //ユーザー情報の取得
+            //同じ名前の要素で複数個取得する場合、親要素を指定する
+            const get_number     = $(this).parent('p').prevAll("#user_number").val();
+            const get_name       = $(this).parent('p').prevAll("#user_name").val();
+            const get_password   = $(this).parent('p').prevAll("#user_password").val();
+            const get_free_text  = $(this).parent('p').prevAll("#user_free_text").val();
+            const get_created_at = $(this).parent('p').prevAll("#user_created_at").val();
+            const get_updated_at = $(this).parent('p').prevAll("#user_updated_at").val();
+
+            //値の確認
+            console.log(get_number);
+            console.log(get_name);
+            console.log(get_password);
+            console.log(get_free_text);
+            console.log(get_created_at);
+            console.log(get_updated_at);
+
+            //モーダルに情報を入力
+            modal.find('.modal-title').text('詳細');
+            modal.find('.modal-body input#get-number').val(get_number);
+            modal.find('.modal-body input#get-name').val(get_name);
+            modal.find('.modal-body input#get-password').val(get_password);
+            modal.find('.modal-body input#get-free_text').val(get_free_text);
+            modal.find('.modal-body input#get-created_at').val(get_created_at);
+            modal.find('.modal-body input#get-updated_at').val(get_updated_at);
+        });
+
+        $('.modal-update').on('click', function() {
+            //モーダルを取得
+            const modal = $('#modal-update');
+
+            //ajax処理
+
+        });
+    </script>
+
+{% endblock content %}
+
+
+
