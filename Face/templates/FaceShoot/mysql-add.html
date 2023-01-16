@@ -1,0 +1,60 @@
+{% extends "FaceShoot/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block title %}MySQLテスト{% endblock title %}
+
+{% block content %}
+
+    <form action="{% url 'FaceShoot:mysql_insert' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="row col-8">
+                <div class="input-group-text col-8">
+                    <label>学籍番号
+                        <input type="text"
+                         class="form"
+                         placeholder="学籍番号"
+                         name="schoolnum" src=""
+                         maxlength="6">
+                    </label>
+                </div>
+
+                <div class="input-group-text col-8">
+                    <label>名前
+                       <input type="text"
+                         class="form"
+                         placeholder="名前"
+                         name="name" src=""
+                         maxlength="6">
+                    </label>
+                </div>
+
+                <div class="input-group-text col-8">
+                    <label>パスワード
+                        <input type="text"
+                         class="form"
+                         placeholder="パスワード"
+                         name="password" src=""
+                         maxlength="6">
+                    </label>
+                </div>
+
+                <div class="input-group-text col-8">
+                    <label>結果表示テキスト
+                        <input type="text"
+                         class="form"
+                         placeholder="結果表示用テキスト"
+                         name="freetext" src=""
+                         maxlength="6">
+                    </label>
+                </div>
+
+                <div class="form-row form-check col-8">
+                    <button type="submit" class="btn btn-primary">送信</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+{% endblock content %}

@@ -1,0 +1,47 @@
+{% extends "FaceShoot/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+{% block title %}勤怠{% endblock title %}
+
+{% block content %}
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th rowspan="2"><span style="font-size: xx-large">3月</span></th>
+            <th>学籍番号</th>
+            <th>名前</th>
+            <th>勤務日数</th>
+        </tr>
+        {% for query in query_set_day %}
+        <tr>
+            {% for field,val in query.items %}
+                <td>{{ val }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>出勤</th>
+            <th>退勤</th>
+            <th>勤怠</th>
+            <th>勤務時間</th>
+        </tr>
+        {% for query in query_set_record %}
+            <tr>
+                <td>{{ query.出勤 }}</td>
+                <td>{{ query.退勤 }}</td>
+                <td>
+                    {% if query.勤怠 == 0 %}
+                        ×
+                    {% elif query.勤怠 == 1 %}
+                        〇
+                    {% endif %}
+                </td>
+                <td>{{ query.勤務時間 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock content %}

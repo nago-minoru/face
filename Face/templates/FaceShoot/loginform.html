@@ -1,0 +1,103 @@
+{% extends "FaceShoot/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}マイページ{% endblock title %}
+
+{% block content %}
+    {% if session_id %}
+        <text class="text text-lg-right text-dark text-body" >
+            ID：{{ session_id }}(session)
+        </text>
+    {% else %}
+        <text class="text text-lg-right text-dark text-body" >
+            ログインまだ
+        </text>
+    {% endif %}
+
+    {% if user %}
+        <p class="p popover-header">ユーザー情報</p>
+        {% if not kao %}
+            <h4 class="mt-4 border-bottom">顔学習の説明書</h4>
+            <ul>
+                <li>ステップ１：訓練画像の登録</li>
+                <li>ステップ２：テスト画像登録</li>
+                <li>ステップ３：学習する</li>
+                <li>ステップ４：結果を分類器に書き込み</li>
+            </ul>
+        {% endif %}
+        <a href="{% url 'FaceShoot:facepic' school_num=user.schoolnum %}" class="btn btn-primary btn-sm my-3">顔画像</a>
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>名前</th>
+                <td>{{ user.user_name }}</td>
+            </tr>
+            <tr>
+                <th>パスワード</th>
+                <td>{{ user.password }}</td>
+            </tr>
+            <tr>
+                <th>学籍番号</th>
+                <td>{{ user.schoolnum }}</td>
+            </tr>
+            <tr>
+                <th>作成日</th>
+                <td>{{ user.created_at }}</td>
+            </tr>
+            <tr>
+                <th>更新日</th>
+                <td>{{ user.updated_at }}</td>
+            </tr>
+            <tr>
+                <th>備考</th>
+                <td>{{ user.free_text }}</td>
+            </tr>
+        </table>
+        {% if kao %}
+            <button class="btn btn-info" name="face_disp">顔画像表示</button>
+            <div id="face_disp" style="display: none; width: 1140px;">
+                <form action="{% url 'FaceShoot:user_face_del' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="sticky-top"><button type="submit" class="btn btn-primary" style="float: right;">画像削除</button></div>
+                    {% for face in kao %}
+                        <span>
+                            <input type="checkbox" name="del_img" value="{{ face }}" style="display: none;">
+                            <img src="../../{{ face }}" alt="" class="img-responsive img-rounded" width="200" height="200">
+                        </span>
+                    {% endfor %}
+                    <input type="hidden" value="{{ user.schoolnum }}" name="user_id">
+                </form>
+            </div>
+        {% endif %}
+    {% else %}
+        <form action="{% url 'FaceShoot:login' user_id=user.schoolnum %}" method="POST" class="form-inline">
+            {% csrf_token %}
+            <input type="text" name="txtGakuseki" class="input-group-text" placeholder="学籍番号" maxlength="5">
+            <button type="submit" class="btn btn-primary">認証</button>
+        </form>
+        {% if Gakuseki %}
+            <p>入力文字：{{ Gakuseki }}</p>
+        {% endif %}
+    {% endif %}
+    {% if SearchErrMsg %}
+        <p class="p popover-header">{{ searchErrMsg }}</p>
+    {% endif %}
+
+    {# 気に入らない画像を消す処理 #}
+    <script type="text/javascript">
+        let size = 0;
+        let img_switch = false;
+        $('img').on('click', function () {
+            img_switch = !img_switch;
+            size = img_switch ? 5 : 0;
+            $(this).css({
+                'border' : 'solid '+size+'px blue'
+            }).prev('input').prop('checked', img_switch);
+            //console.log(img_switch, size);
+        });
+        $('button[name="face_disp"]').on('click', function () {
+            $('#face_disp').toggle();
+        })
+    </script>
+
+
+{% endblock content %}

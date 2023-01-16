@@ -1,0 +1,66 @@
+{% extends "FaceShoot/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+
+{% block title %}画像出す{% endblock title %}
+
+{% block content %}
+    <p>学習用のファイルのパス</p>
+    {% if get_file_path %}
+        <p>もし受け取りに成功すれば表示されます</p>
+        <form action="{% url 'FaceShoot:imgdel' %}" method="post" enctype="multipart/form-data">
+            <button type="submit">送信</button>
+            {% csrf_token %}
+            {% for readfile in get_file_path %}
+                {% for img in readfile %}
+                    <span>
+                        <input type="checkbox" name="del_img" value="{{ img }}" style="display: none;">
+                        <img src="../../{{ img }}" alt="" class="img-responsive img-rounded" width="200" height="200">
+                    </span>
+                {% endfor %}
+            {% endfor %}
+        </form>
+
+        {# 選択した画像を削除 #}
+        <script type="text/javascript">
+            // 初期値のスイッチはOFF
+            let size = 0;
+            let img_switch = false;
+
+            // imgタグをクリックした瞬間動く
+            $('img').on('click', function () {
+                //クリックされたらスイッチをオンにする
+                img_switch = !img_switch;
+                // 参考演算子
+                // もしimg_switchがTrueならsizeを3にする
+                // 下の処理で画像を囲む青い線のピクセル数を指定している
+                size = img_switch ? 5 : 0;
+                // cssで画像を四角く囲む
+                $(this).css({
+                    'border' : 'solid '+size+'px blue'
+                }).prev('input').prop('checked', img_switch);
+                console.log(img_switch, size);
+
+                //-------------------------------------
+                // 翻訳：ひとつ前の要素のチェックボックスをONにする
+                // input[check]タグ imgタグ
+                //
+                // イメージ
+                //  ↓触らない    ↓クリック
+                // -----------------------
+                // |checkBox：OFF|imgタグ|
+                // -----------------------
+                //
+                //        ↓   にする
+                //
+                //  ↓変更あり    ↓青くなる
+                // -----------------------
+                // |checkBox：ON |imgタグ|
+                // -----------------------
+                //---------------------------------------
+            });
+
+        </script>
+
+    {% endif %}
+{% endblock content %}

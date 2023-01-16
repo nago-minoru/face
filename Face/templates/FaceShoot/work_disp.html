@@ -1,0 +1,43 @@
+{% extends "FaceShoot/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+{% block title %}MySQLテスト{% endblock title %}
+
+{% block content %}
+
+    {# 戻る #}
+    <a href="{% url 'FaceShoot:mysql_disp' %}" class="btn btn-primary btn-sm my-3">戻る</a>
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>学籍番号</th>
+            <th>名前</th>
+            <th>勤務時間</th>
+        </tr>
+        {% for query in query_set_time %}
+        <tr>
+            {% for field,val in query.items %}
+                <td>{{ val }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>学籍番号</th>
+            <th>名前</th>
+            <th>日数</th>
+        </tr>
+        {% for query in query_set_day %}
+        <tr>
+            {% for field,val in query.items %}
+                <td>{{ val }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+
+
+{% endblock content %}

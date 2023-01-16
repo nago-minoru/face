@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<config>
+    <source_groups>
+        <source_group_f58c7a8e-9e01-44cb-87d4-597578b313eb>
+            <name>Python Source Group</name>
+            <python_environment_path>C:/virtualenv/face</python_environment_path>
+            <source_extensions>
+                <source_extension>.py</source_extension>
+            </source_extensions>
+            <source_paths>
+                <source_path>./</source_path>
+            </source_paths>
+            <status>enabled</status>
+            <type>Python Source Group</type>
+        </source_group_f58c7a8e-9e01-44cb-87d4-597578b313eb>
+    </source_groups>
+    <version>8</version>
+</config>

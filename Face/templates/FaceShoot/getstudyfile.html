@@ -1,0 +1,16 @@
+{% extends "FaceShoot/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}学習データ出す{% endblock title %}
+
+{% block content %}
+    <p>学習用のファイルのパス</p>
+    {% if get_file_path %}
+        <p>もし受け取りに成功すれば表示されます</p>
+        {% for readfile in get_file_path %}
+            {% for study in readfile %}
+                <p>{{ study }}</p>
+            {% endfor %}
+        {% endfor %}
+    {% endif %}
+{% endblock content %}

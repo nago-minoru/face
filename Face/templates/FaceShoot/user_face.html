@@ -1,0 +1,97 @@
+{% extends "FaceShoot/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+{% load staticfiles %}
+<script src="{% static 'FaceShoot/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'FaceShoot/js/bootstrap.bundle.min.js' %}"></script>
+
+{% block title %}撮影した顔写真{% endblock title %}
+
+{% block content %}
+    {% if kao %}
+        {% if flg %}
+            <h4 class="mt-4 border-bottom">このデータでよければ学習します</h4>
+            <a href="{% url 'FaceShoot:user_face_learn' user_id=school_num %}" class="btn btn-primary btn-sm my-3">学習開始</a>
+            <button class="btn btn-info" name="face_disp">顔画像表示</button>
+            <div id="face_disp" style="display: none; width: 1140px;">
+                <form action="{% url 'FaceShoot:user_this_time_face_del' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="sticky-top"><button type="submit" class="btn btn-primary" style="float: right;">画像削除</button></div>
+                    {% for face in kao %}
+                        <span>
+                            <input type="checkbox" name="del_img" value="{{ face }}" style="display: none;">
+                            <img src="../../{{ face }}" alt="" class="img-responsive img-rounded" width="200" height="200">
+                        </span>
+                    {% endfor %}
+                    <input type="hidden" value="{{ school_num }}" name="user_id">
+                    <input type="hidden" value="{{ kao }}" name="all_face">
+                </form>
+            </div>
+        {% else %}
+            <h4 class="mt-4 border-bottom">訓練画像</h4>
+            <a href="{% url 'FaceShoot:facepic' school_num=school_num %}" class="btn btn-primary btn-sm my-3">顔学習へ</a>
+            <a href="{% url 'FaceShoot:user_disp' %}" class="btn btn-primary btn-sm my-3">戻る</a>
+            <button class="btn btn-info" name="face_disp">顔画像表示</button>
+            <div id="face_disp" style="display: none; width: 1140px;">
+                <form action="{% url 'FaceShoot:user_this_time_face_del' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="sticky-top"><button type="submit" class="btn btn-primary" style="float: right;">画像削除</button></div>
+                    {% for face in kao %}
+                        <span>
+                            <input type="checkbox" name="del_img" value="{{ face }}" style="display: none;">
+                            <img src="../../{{ face }}" alt="" class="img-responsive img-rounded" width="200" height="200">
+                        </span>
+                    {% endfor %}
+                    <input type="hidden" value="{{ school_num }}" name="user_id">
+                    <input type="hidden" value="{{ kao }}" name="all_face">
+                </form>
+            </div>
+        {% endif %}
+
+    {# 削除後に戻ってきたときに表示 #}
+    {% elif del_after_face_img %}
+        <h4 class="mt-4 border-bottom">このデータでよければ学習します(削除後)</h4>
+            <a href="{% url 'FaceShoot:user_face_learn' user_id=user_id %}" class="btn btn-primary btn-sm my-3">学習開始</a>
+            <button class="btn btn-info" name="face_disp">顔画像表示</button>
+            <div id="face_disp" style="display: none; width: 1140px;">
+                <form action="{% url 'FaceShoot:user_this_time_face_del' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="sticky-top"><button type="submit" class="btn btn-primary" style="float: right;">画像削除</button></div>
+                    {% for face in del_after_face_img %}
+                        <span>
+                            <input type="checkbox" name="del_img" value="{{ face }}" style="display: none;">
+                            <img src="../../{{ face }}" alt="" class="img-responsive img-rounded" width="200" height="200">
+                        </span>
+                    {% endfor %}
+                    <input type="hidden" value="{{ user_id }}" name="user_id">
+                    <input type="hidden" value="{{ del_after_face_img }}" name="all_face">
+                </form>
+            </div>
+    {% else %}
+        <h4 class="mt-4 border-bottom">撮影した画像はありません…</h4>
+        <a href="{% url 'FaceShoot:user_disp' %}" class="btn btn-primary btn-sm my-3">戻る</a>
+    {% endif %}
+
+
+    {# 気に入らない画像を消す処理 #}
+    <script type="text/javascript">
+        var size = 0;
+        var img_switch = false;
+        $('img').on('click', function () {
+            img_switch = !img_switch;
+            size = img_switch ? 5 : 0;
+            $(this).css({
+                'border' : 'solid '+size+'px blue'
+            }).prev('input').prop('checked', img_switch);
+            //console.log(img_switch, size);
+        });
+        $('button[name="face_disp"]').on('click', function () {
+            $('#face_disp').toggle();
+        })
+    </script>
+
+{% endblock content %}
+
+
+
+

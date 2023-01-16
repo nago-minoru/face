@@ -1,0 +1,29 @@
+{% load i18n static %}
+
+<!DOCTYPE html>{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE|default:"ja" }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="{% static 'FaceShoot/css/bootstrap.min.css' %}">
+<script src="{% static 'FaceShoot/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'FaceShoot/js/bootstrap.bundle.min.js' %}"></script>
+{% block extra_css %}{% endblock %}
+<title>{% block title %}My books{% endblock %}</title>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'FaceShoot:ninsyo' %}" class="btn btn-primary btn-sm my-3">顔認証</a>
+        <a href="{% url 'FaceShoot:user_disp' %}" class="btn btn-primary btn-sm my-3">ユーザー</a>
+        <a href="{% url 'FaceShoot:qr_code' %}" class="btn btn-primary btn-sm my-3">スマホ</a>
+        <a href="{% url 'FaceShoot:picture' %}" class="btn btn-primary btn-sm my-3">証明写真</a>
+        <a href="{% url 'FaceShoot:imagelist' %}" class="btn btn-primary btn-sm my-3">アップロード</a>
+        <a href="{% url 'FaceShoot:get_image' %}" class="btn btn-primary btn-sm my-3">全画像取得</a>
+{#        <a href="{% url 'FaceShoot:mysql_disp' %}" class="btn btn-primary btn-sm my-3">MySQLお試し</a>#}
+        {% block content %}
+            {{ content }}  {# コンテンツ：いろいろ書く #}
+        {% endblock %}
+    </div>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

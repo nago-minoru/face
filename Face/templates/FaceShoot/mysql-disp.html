@@ -1,0 +1,70 @@
+{% extends "FaceShoot/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+{% block title %}MySQLテスト{% endblock title %}
+
+{% block content %}
+
+
+    {# 追加ボタン #}
+    <div class="col-1"><a href="{% url 'FaceShoot:mysql_add' %}" class="btn btn-info btn-sm">追加</a></div>
+
+    <form action="{% url 'FaceShoot:search' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group row">
+            <div class="offset-md-3 col-md-9">
+                <input type="text"
+                     class="form my-3"
+                     placeholder="学籍番号"
+                     name="schoolnum" src="">
+
+                <input type="text"
+                     class="form my-3"
+                     placeholder="名前"
+                     name="name" src="">
+
+                <input type="text"
+                    class="form my-3"
+                    placeholder="作成日"
+                    name="create_at" src="">
+
+                <button type="submit" class="btn btn-primary">検索</button>
+            </div>
+        </div>
+    </form>
+
+    {# 検索結果の表示をしたい #}
+    <h4 class="mt-4 border-bottom">検索結果</h4>
+    <style>
+        .t-cell {
+            border: solid 1px black;
+            background: #cccccc;
+        }
+        .title-cell{
+            border: solid 1px black;
+            background: #9fcdff;
+            font-size: large;
+        }
+    </style>
+
+    {% if query_set %}
+        <div class="row">
+            <div class="row col-12">
+                {% for query in query_set|last %}
+                    <div class="col-2 title-cell">{{ query }}</div>
+                {% endfor %}
+                <div class="col-2 title-cell">操作</div>
+            </div>
+        {% for query in  query_set %}
+            <div class="row col-12">
+                {% for field,item in query.items %}
+                    <div class="col-2 t-cell">{{ item }}</div>
+                {% endfor %}
+                <div class="col-1 t-cell"><a href="{% url 'FaceShoot:mysql_update' schoolnum=query.schoolnum %}" class="btn btn-info btn-sm">修正</a></div>
+                <div class="col-1 t-cell"><a href="{% url 'FaceShoot:mysql_del' schoolnum=query.schoolnum %}" class="btn btn-danger btn-sm">削除</a></div>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock content %}

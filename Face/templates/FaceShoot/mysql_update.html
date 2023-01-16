@@ -1,0 +1,58 @@
+{% extends "FaceShoot/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+
+{% block title %}MySQLテスト{% endblock title %}
+
+{% block content %}
+
+    <form action="{% url 'FaceShoot:mysql_update_commit' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="row col-8">
+                {% for val in query_set %}
+                <div class="input-group-text col-8">
+                    <label>学籍番号
+                        <input type="text"
+                         class="form"
+                         placeholder="学籍番号"
+                         name="schoolnum" value="{{ val.schoolnum }}">
+                    </label>
+                </div>
+
+                <div class="input-group-text col-8">
+                    <label>名前
+                       <input type="text"
+                         class="form"
+                         placeholder="名前"
+                         name="name" value="{{ val.name }}">
+                    </label>
+                </div>
+
+                <div class="input-group-text col-8">
+                    <label>パスワード
+                        <input type="text"
+                         class="form"
+                         placeholder="パスワード"
+                         name="password" value="{{ val.password }}">
+                    </label>
+                </div>
+
+                <div class="input-group-text col-8">
+                    <label>結果表示テキスト
+                        <input type="text"
+                         class="form"
+                         placeholder="結果表示用テキスト"
+                         name="freetext" value="{{ val.freetext }}">
+                    </label>
+                </div>
+                {% endfor %}
+                <div class="form-row form-check col-8">
+                    <button type="submit" class="btn btn-primary">削除</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+{% endblock content %}

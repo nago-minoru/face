@@ -1,0 +1,34 @@
+{% extends "FaceShoot/base.html" %}
+{% load bootstrap4 %}
+{% load static %}
+{% load staticfiles %}
+<script src="{% static 'FaceShoot/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'FaceShoot/js/bootstrap.bundle.min.js' %}"></script>
+
+{% block title %}撮影した顔写真{% endblock title %}
+
+{% block content %}
+    {% if kao %}
+        <h4 class="mt-4 border-bottom">このデータでよければ学習します</h4>
+        <a href="{% url 'FaceShoot:user_disp' %}" class="btn btn-primary btn-sm my-3">ユーザー操作</a>
+        <table class="table table-striped table-bordered">
+            <tr class="row">
+            <form action="{% url 'FaceShoot:face_del' user_id=user_id %}" method="post" id="search_form" multiple="">
+                {% csrf_token %}
+                {% for face in kao %}
+                    <td>
+                        <label>送信
+                            <input type="checkbox" name="riyu_{{ face }}" value="1">
+                        </label>
+                        <img src="../../{{ face }}" alt="" class="img-rounded img-responsive" width="150" height="150">
+                    </td>
+                {% endfor %}
+            </form>
+            </tr>
+        </table>
+    {% endif %}
+{% endblock content %}
+
+
+
+

@@ -1,0 +1,20 @@
+{% extends "FaceShoot/base.html" %}
+{% load static %}
+{% load bootstrap4 %}
+{% block title %}画像のアップロードができます{% endblock title %}
+
+{% block content %}
+    <form action="{% url 'FaceShoot:imagelist' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% bootstrap_form form layout='horizontal' %}
+        <input type="submit" value="送信">
+    </form>
+    {% for img in images %}
+{#        <label>{{ img.simple_name }}</label>#}
+{#        <label>{{ img.uploaded_at }}</label>#}
+        <img src="{{ MEDIA_URL }}{{ img.simple_img.url }}" alt="" width="200px" height="200px"/>
+    {% endfor %}
+
+
+
+{% endblock content %}
